@@ -1,86 +1,54 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import SectionHeading from "./SectionHeading";
-import { IconStar } from "./Icons";
-
 export default function Testimonials() {
-  const [testimonials, setTestimonials] = useState([]);
-  const [status, setStatus] = useState("loading"); // loading | success | error
-
-  useEffect(() => {
-    let isMounted = true;
-
-    async function loadTestimonials() {
-      try {
-        const res = await fetch("/api/testimonials");
-        const json = await res.json();
-        if (isMounted && json.success) {
-          setTestimonials(json.data);
-          setStatus("success");
-        } else if (isMounted) {
-          setStatus("error");
-        }
-      } catch (err) {
-        if (isMounted) setStatus("error");
-      }
-    }
-
-    loadTestimonials();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const testimonials = [
+    {
+      logo: "ADP",
+      logoClassName: "text-[#e12d20]",
+      quote:
+        "We would like to thank Accredian for the wonderful support and the beautiful journey. The team turned our vision into reality with unparalleled dedication, service, and expertise throughout the entire process.",
+    },
+    {
+      logo: "BAYER",
+      logoClassName: "text-[#163d5e]",
+      quote:
+        "Accredian's commitment to excellence is unmatched. They consistently go the extra mile to ensure our needs are met and exceeded, providing reliable support and high-quality service every step of the way.",
+    },
+  ];
 
   return (
-    <section id="testimonials" className="bg-slate-900 py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <SectionHeading
-          eyebrow="Success Stories"
-          title="Trusted by L&D Leaders and CHROs"
-          description="Hear from the organizations that transformed their teams with Accredian Enterprise."
-        />
-
-        {status === "loading" && (
-          <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="h-56 animate-pulse rounded-2xl border border-slate-700 bg-slate-800"
-              />
-            ))}
-          </div>
-        )}
-
-        {status === "error" && (
-          <p className="mt-14 text-center text-slate-400">
-            Couldn&apos;t load testimonials right now. Please refresh the page.
+    <section id="testimonials" className="bg-white px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+      <div className="mx-auto max-w-[1600px]">
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="text-3xl font-semibold tracking-[-0.04em] text-slate-950 sm:text-4xl lg:text-[3rem]">
+            Testimonials from <span className="text-[#2673e8]">Our Partners</span>
+          </h2>
+          <p className="mt-4 text-lg text-slate-700 sm:text-xl">
+            What <span className="text-[#2673e8]">Our Clients</span> Are Saying
           </p>
-        )}
+        </div>
 
-        {status === "success" && (
-          <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {testimonials.map((t, idx) => (
-              <div
-                key={idx}
-                className="flex flex-col rounded-2xl border border-slate-700 bg-slate-800/60 p-7"
-              >
-                <div className="flex gap-1 text-amber-400">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <IconStar key={i} className="h-4 w-4" />
-                  ))}
+        <div className="mt-14 grid gap-3 lg:grid-cols-2 lg:gap-2">
+          {testimonials.map((item) => (
+            <article
+              key={item.logo}
+              className="min-h-[320px] rounded-[18px] border border-[#d5dbea] bg-white px-8 py-8 shadow-[0_0_0_1px_rgba(15,23,42,0.02)] sm:px-10 sm:py-10 lg:min-h-[330px]"
+            >
+              <div className="flex h-full flex-col justify-start">
+                <div className={`text-[2.6rem] font-extrabold leading-none tracking-[-0.07em] ${item.logoClassName}`}>
+                  {item.logo}
                 </div>
-                <p className="mt-4 flex-1 text-sm leading-relaxed text-slate-200">
-                  &ldquo;{t.quote}&rdquo;
+
+                <p className="mt-12 max-w-[38rem] text-[1.04rem] leading-[1.55] text-slate-700 sm:text-[1.08rem] lg:text-[1.12rem]">
+                  &ldquo;{item.quote}&rdquo;
                 </p>
-                <div className="mt-6 border-t border-slate-700 pt-4">
-                  <div className="text-sm font-semibold text-white">{t.name}</div>
-                  <div className="text-xs text-slate-400">{t.role}</div>
-                </div>
               </div>
-            ))}
-          </div>
-        )}
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-7 flex items-center justify-center gap-2">
+          <span className="h-3 w-3 rounded-full bg-[#1f71e9]" />
+          <span className="h-3 w-3 rounded-full bg-slate-300" />
+        </div>
       </div>
     </section>
   );
