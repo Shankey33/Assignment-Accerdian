@@ -6,7 +6,6 @@ import Programs from "@/components/Programs";
 import HowItWorks from "@/components/HowItWorks";
 import Faqs from "@/components/Faqs";
 import Testimonials from "@/components/Testimonials";
-import CtaBanner from "@/components/CtaBanner";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 
@@ -22,7 +21,6 @@ export default function Home() {
         <HowItWorks />
         <Faqs />
         <Testimonials />
-        <CtaBanner />
         <ContactForm />
       </main>
       <Footer />
