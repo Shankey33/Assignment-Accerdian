@@ -7,43 +7,12 @@ import { IconMenu, IconClose } from "./Icons";
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeHref, setActiveHref] = useState("#top");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    const sections = nav
-      .map((item) => document.querySelector(item.href))
-      .filter(Boolean);
-
-    if (!sections.length) {
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-
-        if (visible) {
-          setActiveHref(`#${visible.target.id}`);
-        }
-      },
-      {
-        rootMargin: "-35% 0px -55% 0px",
-        threshold: [0.15, 0.3, 0.5, 0.75],
-      }
-    );
-
-    sections.forEach((section) => observer.observe(section));
-
-    return () => observer.disconnect();
   }, []);
 
   // Prevent background scroll when mobile menu is open
@@ -54,13 +23,8 @@ export default function Header() {
     };
   }, [isOpen]);
 
-  const handleNavClick = (e, href) => {
-    e.preventDefault();
+  const handleNavClick = (href) => {
     setIsOpen(false);
-    const el = document.querySelector(href);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
   };
 
   return (
@@ -72,7 +36,7 @@ export default function Header() {
       <div className="mx-auto flex max-w-[1440px] items-center justify-between px-8 py-6 lg:px-12">
         <a
           href="#top"
-          onClick={(e) => handleNavClick(e, "#top")}
+          onClick={() => handleNavClick("#top")}
           className="flex flex-col leading-none"
         >
           <span className="text-[30px] font-extrabold leading-none tracking-[-0.04em] text-[#2673e8]">
@@ -89,10 +53,8 @@ export default function Header() {
             <a
               key={item.href}
               href={item.href}
-              onClick={(e) => handleNavClick(e, item.href)}
-              className={`relative pb-1 text-[17px] font-medium transition-colors after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:bg-[#2673e8] after:transition-transform after:duration-200 hover:text-[#2673e8] hover:after:scale-x-100 ${
-                activeHref === item.href ? "text-[#2673e8] after:scale-x-100" : "text-slate-900"
-              }`}
+              onClick={() => handleNavClick(item.href)}
+              className="text-[17px] font-medium text-slate-900 transition-colors hover:text-[#2673e8]"
             >
               {item.label}
             </a>
@@ -122,10 +84,8 @@ export default function Header() {
             <a
               key={item.href}
               href={item.href}
-              onClick={(e) => handleNavClick(e, item.href)}
-              className={`rounded-lg px-3 py-3 text-base font-medium transition-colors hover:bg-slate-50 hover:text-[#2673e8] ${
-                activeHref === item.href ? "text-[#2673e8]" : "text-slate-700"
-              }`}
+              onClick={() => handleNavClick(item.href)}
+              className="rounded-lg px-3 py-3 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#2673e8]"
             >
               {item.label}
             </a>
